@@ -1,0 +1,43 @@
+{%extends 'base.html'%}	
+{% block titulo %}
+	Resultados
+{% endblock titulo %}
+{% block content %}
+	<div class='col s12  m12  l12'>
+	{% for c in competencias %}
+	<div class='col s12 m12 l12 card' >
+
+	<div align='center' class="blue"><strong>{{c}}</strong></div>
+	
+			<table class="responsive-table bordered">
+				<theader>
+					<th>Aprendices</th>
+					<th>region</th>
+					<th>total</th>
+					<th>dia 1</th>
+					<th>dia 2</th>
+					<th>dia 3</th>
+					<th>dia 4</th>
+					
+				</theader>	
+				<tbody>
+					{% for r in resultados %}
+						{% if  c == r.competencia %}
+							<tr>
+								<td>{{r.aprendices}}</td>
+								<td>{{r.region}}</td>
+								<td>{{r.total}}</td>
+								<td>{{r.dia_1}}</td>
+								<td>{{r.dia_2}}</td>
+								<td>{{r.dia_3}}</td>
+								<td>{{r.dia_4}}</td>
+							</tr>
+						{% endif %}
+					{% endfor %}
+				</tbody>
+			</table>
+	</div>
+	{% endfor %}
+
+	</div>
+{% endblock content %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block titulo %}
+	Importar lista de Concursantes	
+{% endblock titulo %}
+{% block content %}
+	<h2>Subir  Resultados</h2>
+	<form method="POST" class="" enctype = "multipart/form-data">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit" class="save btn btn-default">Guardar</button>
+	</form>
+
+	{% for m in messages %}
+		{{m}}
+	{% endfor %}
+		
+{% endblock content %}	
+
