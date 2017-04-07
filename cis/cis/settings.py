@@ -25,7 +25,7 @@ SECRET_KEY = '=xdrx1epl=1tfd(5l(9jsg3@yli9a64z93z2%t)f-bio!ss1c-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['cisweb.herokuapp.com']
 
 
 # Application definition
