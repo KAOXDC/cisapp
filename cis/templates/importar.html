@@ -3,16 +3,21 @@
 	Importar lista de Concursantes	
 {% endblock titulo %}
 {% block content %}
-	<h2>Subir  Resultados</h2>
-	<form method="POST" class="" enctype = "multipart/form-data">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<button type="submit" class="save btn btn-default">Guardar</button>
-	</form>
-
+	<div align="center">
+	<h4>Subir  Resultados</h4>
+	<h4>Seleccione el  archivo  con los  resultado en formato xlsx</h4>  	
+	</div>
+	
+	<div class="col s6 offset-s3 m6 offset-m3">
+		<div class="card-panel">
+			<form method="POST" class="" enctype = "multipart/form-data" align="center">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<button type="submit" class="save btn btn-default green darken-4">Subir Resultados</button>
+			</form>
+		</div>
+	</div>
 	{% for m in messages %}
 		{{m}}
 	{% endfor %}
-		
 {% endblock content %}	
-

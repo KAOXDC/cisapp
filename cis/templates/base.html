@@ -6,27 +6,39 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="UTF-8">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<title>{% block titulo %}{% endblock titulo %}</title>
+	<title>{% block titulo %}Bienvenidos{% endblock titulo %}</title>
+	<meta charset="utf-8">
 </head>
 <body>
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script type="text/javascript" src="/static/materialize/js/materialize.min.js"></script>
-	<nav class="light-blue">
+	<div class="navbar-fixed">
+	<nav class="green lighten-5">
 		<div class="nav-wrapper">
-			<a href="#!" class="brand-logo">Logo</a>
-			<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+			<a href="/" class="brand-logo center"><img src="/static/images/logotipos.png" weight="50px"height="70px"></a>
+			<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons green darken-4">menu</i></a>
 			<ul class="right hide-on-med-and-down">
-
-				<li><a href="mobile.html">Cerrar Sesion</a></li>
-				<li><a href="mobile.html">Iniciar Sesion</a></li>
+				<li><a href="{% url 'resultados' %}" ><span class="green-text darken-4">Ver Resultados</span></a></li>
+				{% if user.is_authenticated %}
+					<li><a href="{% url 'importar' %}" ><span class="green-text darken-4">Registrar Datos</span></a></li>
+					<li><a href="{% url 'cerrar_sesion' %}" ><span class="green-text darken-4">Cerrar Sesion</span></a></li>
+				{% else %}
+					<li><a href="/" ><span class="green-text darken-4">Iniciar Sesion</span></a></li>
+				{% endif %}
 			</ul>
 			<ul class="side-nav" id="mobile-demo">
 
-				<li><a href="mobile.html">Cerrar Sesion</a></li>
-				<li><a href="mobile.html">Iniciar Sesion</a></li>
+				<li><a href="{% url 'resultados' %}" ><span class="green-text darken-4">Ver Resultados</span></a></li>
+				{% if user.is_authenticated %}
+					<li><a href="/" ><span class="green-text darken-4">Registrar Datos</span></a></li>
+					<li><a href="{% url 'cerrar_sesion' %}" ><span class="green-text darken-4">Cerrar Sesion</span></a></li>
+				{% else %}
+					<li><a href="/" ><span class="green-text darken-4">Iniciar Sesion</span></a></li>
+				{% endif %}
 			</ul>
 		</div>
 	</nav>
+	</div>
 
 	<div class="container">
 
@@ -34,9 +46,9 @@
     <div class="row">
 
 
-		<div class="col s12 m8 l12 light-blue lighten-5"> <!-- Note that "m8 l9" was added -->
-			<span class="flow-text" > CONTENIDO </span>
-			<div class="row">
+		<div class="col s12 m12 l12 light-green lighten-5"> <!-- Note that "m8 l9" was added -->
+			<span class="flow-text" > Bienvenido a Senasoft </span>
+			<div class="">
 				{% block content %}
 				{% endblock %}
 			</div>
@@ -53,6 +65,21 @@
 
 
 	</div>
+
+	<footer class="">
+				<div>
+
+					<img class="responsive-img" src="/static/images/pie-de-pagina.png">
+				</div>
+		<div class="footer-copyright">
+			<div class="container center">
+				© 2017 Copyright SENA CTPI CAUCA dfprado4@misena.edu.co
+				<a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+			</div>
+		</div>
+	</footer>
+
+
 	  <!-- Modal Structure -->
 		<div id="modal1" class="modal">
 			<div class="modal-content">

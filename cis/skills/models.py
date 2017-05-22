@@ -11,14 +11,13 @@ class Concursante(models.Model):
 	 	
 	aprendices 			= models.CharField(max_length=1000)		
 	region	 			= models.CharField(max_length=150)
-	total	 			= models.IntegerField()
-	dia_1	 			= models.IntegerField()
-	dia_2	 			= models.IntegerField()
-	dia_3	 			= models.IntegerField()
-	dia_4	 			= models.IntegerField()
-
+	total	 			= models.FloatField()
+	dia_1	 			= models.FloatField()
+	dia_2	 			= models.FloatField()
+	dia_3	 			= models.FloatField()
+	dia_4	 			= models.FloatField(null=True,blank=True)
 	def __unicode__ (self):
-		return self.competencia +" "+ self.aprendices +" "+ self.region +" "+ str(self.total)+" "+ str(self.dia_1)+" "+ str(self.dia_2)+" "+ str(self.dia_3)+" "+ str(self.dia_4)
+		return str(self.pk) +" "+ self.competencia +" "+ self.aprendices +" "+ self.region +" "+ str(self.total)+" "+ str(self.dia_1)+" "+ str(self.dia_2)+" "+ str(self.dia_3)+" "+ str(self.dia_4)
 
 
 

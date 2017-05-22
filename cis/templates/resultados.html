@@ -4,33 +4,43 @@
 {% endblock titulo %}
 {% block content %}
 	<div class='col s12  m12  l12'>
-	{% for c in competencias %}
-	<div class='col s12 m12 l12 card' >
 
-	<div align='center' class="blue"><strong>{{c}}</strong></div>
+<div class="col s6 offset-s3 m6 offset-m3 card">
+<div class="" align='center'>
+	<form action="." method="POST" align="center">
+		{% csrf_token %}
+		<h5>{{mensaje}}</h5>
+		{{form.as_p}}
+		<button class="btn btn-primary green darken-4"> Filtrar Resultados </button>
+	</form>
+</div>
+</div>
+
+	{% for c in lista %}
+	<div class='col s12 m12 l12 card' >
+	<div align='center' class="lime"><strong>{{c.0}} - {{c.1}}</strong></div>
+
 	
-			<table class="responsive-table bordered">
+			<table class="responsive-table striped">
 				<theader>
-					<th>Aprendices</th>
-					<th>region</th>
-					<th>total</th>
-					<th>dia 1</th>
-					<th>dia 2</th>
-					<th>dia 3</th>
-					<th>dia 4</th>
+					<th class="green darken-4 white-text">Aprendices</th>
+					<th class="green darken-4 white-text">Región</th>
+					<th class="green darken-4 white-text">Total</th>
+					<th class="green darken-4 white-text">Día 1</th>
+					<th class="green darken-4 white-text">Día 2</th>
+					<th class="green darken-4 white-text">Día 3</th>
 					
 				</theader>	
 				<tbody>
 					{% for r in resultados %}
-						{% if  c == r.competencia %}
+						{% if  c.0 == r.competencia %}
 							<tr>
 								<td>{{r.aprendices}}</td>
 								<td>{{r.region}}</td>
-								<td>{{r.total}}</td>
-								<td>{{r.dia_1}}</td>
-								<td>{{r.dia_2}}</td>
-								<td>{{r.dia_3}}</td>
-								<td>{{r.dia_4}}</td>
+								<td>{{r.total|floatformat:2}}</td>
+								<td>{{r.dia_1|floatformat:2}}</td>
+								<td>{{r.dia_2|floatformat:2}}</td>
+								<td>{{r.dia_3|floatformat:2}}</td>
 							</tr>
 						{% endif %}
 					{% endfor %}
@@ -39,5 +49,11 @@
 	</div>
 	{% endfor %}
 
+	</div>
+
+	<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+		<a href="#"	class="btn-floating btn-large orange">
+			<i class="material-icons">present_to_all</i>
+		</a>
 	</div>
 {% endblock content %}

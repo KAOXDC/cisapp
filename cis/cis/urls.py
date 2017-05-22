@@ -27,10 +27,13 @@ router.register(r'resultados_api', resultados_viewset, 'resultados_api')
 
 
 urlpatterns = [
-    url(r'^$',inicio_view),
+    url(r'^$',inicio_view, name='inicio'),
+    url(r'^cerrar_sesion/$',cerrar_sesion,name='cerrar_sesion'),
     url(r'^admin/', admin.site.urls),
-    url(r'^importar/',importar_view),
-    url(r'^resultados/',resultados_view),
+    url(r'^importar/',importar_view, name='importar'),
+    url(r'^resultados/',resultados_view, name='resultados'),
+    #url(r'^buscar/',buscar_view, name='buscar'),
+
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/', include(router.urls)),
 ]

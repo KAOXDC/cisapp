@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
+from django.db.models import Q
 
 from openpyxl import load_workbook
 from .forms import *
@@ -22,61 +23,80 @@ def importar_view(request):
 			handle_uploaded_file(request.FILES['archivo'])
 			info = "es valido"
 			messages.success(request, "Archivo subido con Exito")
+			'''carga el  excel'''
 			cargar_excel()
-			return HttpResponseRedirect('/resultados/')
+			return redirect('/resultados/')
 		else:	
 			messages.success(request, "Error al subir Archivo")
 	else:
 		form = importar_form()
 	return render(request,'importar.html',locals())
 
+def eliminar_registros_evento():
+	try:
+		Concursante.objects.all().delete()
+		mensaje = "registros eliminados con exito" 
+	except:
+		mensaje = "no se pudo eliminar" 
+		return False
+	return True 
+
+
 def cargar_excel():
 	'''Leer XL'''
 	competencias = []
 	wb = load_workbook(filename = 'media/excel.xlsx')
-	#sheet_ranges = wb['Table 1']
-	#print sheet_ranges['B3'].value
-	#wb.get_sheet_names()
 	marca = "100 Scale Marks"
+	evento = "Sin Evento"
 	aux = " "
 	personas = []
 	hoja=wb.get_sheet_by_name(str(wb.get_sheet_names()[0])) #obtiene el nombre de la hoja
 	temp = wb.active
 	#print temp.rows
+
+	''' Elimina registros de la  base de datos  '''
+	eliminar_registros_evento()
+
+
+	''' Recorre el excel '''
 	for i in range(1, 1000):
 		try:
-			fila = hoja['B'+str(i)].value.encode('utf8')
+			fila = hoja['A'+str(i)].value.encode('utf8')
 			#reg  = hoja['C'+str(i)].value.encode('utf8')
 		except:
 			fila = "blanco"
 			#reg = "blanco"
 		try:
-			if fila != 'Name':
-				persona = hoja['B'+str(i)].value.encode('utf8')
-				region  = hoja['C'+str(i)].value.encode('utf8')
-				dia_1   = hoja['E'+str(i)].value#.encode('utf8')
-				dia_2   = hoja['F'+str(i)].value#.encode('utf8')
-				dia_3   = hoja['G'+str(i)].value#.encode('utf8')
-				dia_4   = hoja['H'+str(i)].value#.encode('utf8')
-				total   = dia_1+dia_2+dia_3+dia_4 #.encode('utf8')
-				p = i,'----',persona, region, total, dia_1, dia_2, dia_3, dia_4 
-				#print i,'----',persona, region, total, dia_1, dia_2, dia_3, dia_4 
-				
-				if persona=="blanco" and region=="blanco" and total=="blanco" and dia_1=="blanco" and dia_2=="blanco" and dia_3=="blanco" and dia_4:
+			#identificando el inicio de la  tabla 
+			if fila != 'Name': 
+				persona = hoja['A'+str(i)].value.encode('utf8')
+				region  = hoja['B'+str(i)].value.encode('utf8')
+				dia_1   = (hoja['D'+str(i)].value)/100.#.encode('utf8')
+				dia_2   = (hoja['E'+str(i)].value)/100.#.encode('utf8')
+				dia_3   = (hoja['F'+str(i)].value)/100.#.encode('utf8')
+				#dia_4   = hoja['H'+str(i)].value#.encode('utf8')
+				total   = dia_1+dia_2+dia_3#+dia_4 #.encode('utf8')
+				p = i,'----',persona, region, total, dia_1, dia_2, dia_3#, dia_4 
+				#print i,'----',persona, region, total, dia_1, dia_2, dia_3#, dia_4 
+				print i,'----',type(total), dia_1
+
+				if persona=="blanco" and region=="blanco" and total=="blanco" and dia_1=="blanco" and dia_2=="blanco" and dia_3:# and dia_4:
 					break
 				else:	
 					personas.append(p)
-					Concursante.objects.create(competencia= aux,evento= "FALTA",aprendices= persona,region= region,total=int(total) ,dia_1= int(dia_1),dia_2= int(dia_2),dia_3= int(dia_3),dia_4= int(dia_4))
+					''' Guarda en la  base de Datos '''
+					Concursante.objects.create(competencia= aux,evento= evento,aprendices= persona,region= region,total=total ,dia_1= dia_1,dia_2= dia_2,dia_3= dia_3)#,dia_4= int(dia_4))
 
 		except: 
 			if marca == str(fila):
-				comp = hoja['B'+str(i-1)].value.encode('utf8')
+				comp = hoja['A'+str(i-1)].value.encode('utf8')
+				evento = hoja['A'+str(i+1)].value.encode('utf8')
 				if aux != comp:
 					aux = comp
 					competencias.append(str(comp))
-					#print "-------------------------"
+					print "-------------------------"
 					#print aux
-					#print "-------------------------"
+					print "-------------------------"
 			persona = "blanco"
 			region  = "blanco"
 			dia_1   = "blanco"
@@ -86,7 +106,7 @@ def cargar_excel():
 			total   = "blanco"
 		#print 'B'+str(i), "---", fila
 		if marca == str(fila):
-			comp = hoja['B'+str(i-1)].value.encode('utf8')
+			comp = hoja['A'+str(i-1)].value.encode('utf8')
 			if aux != comp:
 				aux = comp
 				competencias.append(str(comp))
@@ -102,24 +122,43 @@ def cargar_excel():
 	print '===================='
 	print 'total de participantes', len(personas)
 
+def buscar_view(request):
+	return render(request,'inicio.html',{})
 
 def resultados_view(request):
+	mensaje = ""
 	resultados = Concursante.objects.filter()
+	if request.method == "GET":
+		form = buscar_form()
+	if request.method == 'POST':
+		form = buscar_form(request.POST)
+		if form.is_valid():
+			x = form.cleaned_data['buscar']
+			#resultados = Concursante.objects.filter(aprendices__icontains = x)
+			resultados = Concursante.objects.filter(Q(aprendices__icontains=x)|Q(competencia__icontains=x)|Q(region__icontains=x))
+			if resultados:
+				pass
+			else:
+				mensaje = "No se encontraron resultados por favor cambie su criterio de busqueda"
 	competencias=[]
+	eventos=[]
 	aux=''
 	for index, i in enumerate(resultados):
-		comp = resultados[index].competencia
+		comp 	= resultados[index].competencia
+		evento 	= resultados[index].evento
 		if aux != i.competencia:
 			aux = comp 
 			competencias.append(comp)
-
+			eventos.append(evento)
+	lista = zip(competencias,eventos)		
 	print len(competencias)		
 	return render(request,'resultados.html', locals())
 
 
 def inicio_view(request):
 	mensaje = ""
-
+	if request.user.is_authenticated():
+		return redirect('/resultados/')
 	if request.method == "POST": 
 		form = Login_form(request.POST) #creamos un objeto de Loguin_form
 		if form.is_valid(): # si la informacion enviada es correcta
@@ -128,7 +167,7 @@ def inicio_view(request):
 			usuario = authenticate(username = usu, password = pas)#asigna la autenticacion del usuario
 			if usuario is not None and usuario.is_active:# si el usuario no es nulo y esta activo
 				login(request, usuario) #se loguea al sistema con la informacion de usuario
-				return HttpResponseRedirect('/importar/')# redirigimos a la pagina principal
+				return redirect('/importar/')# redirigimos a la pagina principal
 			else:
 				mensaje = "usuario y/o clave incorrecta"
 	form = Login_form() #creamos un form nuevo en limpio
@@ -136,10 +175,12 @@ def inicio_view(request):
 	#return render_to_response('home/login.html', ctx, context_instance = RequestContext(request))
 	return render(request,'inicio.html', locals())
 
+def cerrar_sesion(request):
+	logout(request)
+	return redirect('/')
 
 
-
-
+''' xxxxxxxxxxxxxxxxxx Servicios  Web xxxxxxxxxxxxxxxxxx '''
 
 from django.conf.urls import url, include
 from django.contrib.auth.models import User
@@ -149,12 +190,12 @@ from rest_framework import routers, serializers, viewsets
 class concursante_serializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Concursante
-        fields = ('competencia','evento','fecha_subida','aprendices','region','total','dia_1','dia_2','dia_3','dia_4',)
+        fields = ('competencia','evento','fecha_subida','aprendices','region','total','dia_1','dia_2','dia_3',)
 # ViewSets define the view behavior.
 class resultados_viewset(viewsets.ModelViewSet):
     queryset = Concursante.objects.all()
     serializer_class = concursante_serializer
 
-
+''' xxxxxxxxxxxxxxxxxx Fin Servicios  Web xxxxxxxxxxxxxxxxxx '''
 
 #x = Concursante.objects.create(competencia= "aux",evento= "FALTA",aprendices= "juan",region= "cauca",total=100 ,dia_1= 1,dia_2= 2,dia_3= 3,dia_4= 4)

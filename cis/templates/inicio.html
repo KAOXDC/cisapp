@@ -5,12 +5,16 @@
 {% endblock %}
 
 {% block content %}
-<div class="col s12 m12 l10 card" align='center'>
+
+
+<div class="col s6 offset-s3 m6 offset-m3 card">
+<div class="" align='center'>
 	<form action="." method="POST" align="center">
 		{% csrf_token %}
 		{{mensaje}}
 		{{form.as_p}}
-		<button class="btn btn-primary"> Ingresar </button>
+		<button class="btn btn-primary green darken-4"> Ingresar </button>
 	</form>
+</div>
 </div>
 {% endblock %}
