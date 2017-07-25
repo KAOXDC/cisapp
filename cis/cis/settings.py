@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'skills',
     'rest_framework',
     'gunicorn',
+    'psycopg2',
 
 ]
 
@@ -80,8 +81,14 @@ WSGI_APPLICATION = 'cis.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'db17mhuhr36ung',
+        'USER': 'wesbcgewbejlvm',
+        'PASSWORD': '1c09868724600c3ed1578184dbe78bc41d6576ba8dffa718b7acb2d2051f4c4b',
+        'HOST': 'ec2-54-235-80-137.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
