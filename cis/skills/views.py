@@ -71,9 +71,9 @@ def cargar_excel():
 			if fila != 'Name': 
 				persona = hoja['A'+str(i)].value.encode('utf8')
 				region  = hoja['B'+str(i)].value.encode('utf8')
-				dia_1   = (hoja['D'+str(i)].value)/100.#.encode('utf8')
-				dia_2   = (hoja['E'+str(i)].value)/100.#.encode('utf8')
-				dia_3   = (hoja['F'+str(i)].value)/100.#.encode('utf8')
+				dia_1   = (hoja['D'+str(i)].value)#.encode('utf8')
+				dia_2   = (hoja['E'+str(i)].value)#.encode('utf8')
+				dia_3   = (hoja['F'+str(i)].value)#.encode('utf8')
 				#dia_4   = hoja['H'+str(i)].value#.encode('utf8')
 				total   = dia_1+dia_2+dia_3#+dia_4 #.encode('utf8')
 				p = i,'----',persona, region, total, dia_1, dia_2, dia_3#, dia_4 
