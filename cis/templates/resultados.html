@@ -22,15 +22,17 @@
 
 	
 			<table class="responsive-table striped">
-				<theader>
-					<th class="green darken-4 white-text">Aprendices</th>
-					<th class="green darken-4 white-text">Región</th>
-					<th class="green darken-4 white-text">Total</th>
-					<th class="green darken-4 white-text">Día 1</th>
-					<th class="green darken-4 white-text">Día 2</th>
-					<th class="green darken-4 white-text">Día 3</th>
+				<thead>
+					<tr>
+						<th class="green darken-4 white-text">Aprendices</th>
+						<th class="green darken-4 white-text">Región</th>
+						<th class="green darken-4 white-text">Total</th>
+						<th class="green darken-4 white-text">Día 1</th>
+						<th class="green darken-4 white-text">Día 2</th>
+						<th class="green darken-4 white-text">Día 3</th>
+					</tr>
 					
-				</theader>	
+				</thead>	
 				<tbody>
 					{% for r in resultados %}
 						{% if  c.0 == r.competencia %}
